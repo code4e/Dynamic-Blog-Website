@@ -75,45 +75,46 @@ app.get('/posts/:post_title', (req, res) => {
         }
         else{
             return res.render('home', {
-                head: posts_collection[0].postTitle,
-                content: posts_collection[0].actualPost,
-                posts: ''
+                // head: posts_collection[0].postTitle,
+                // content: posts_collection[0].actualPost,
+                posts: posts_collection,
+                head: '',
+                content: ''
             });
         }
     }).collation(
         { locale: 'en', strength: 2 }
       );
-
-
-
-    // for (let [i, v] of postsArr.entries()) {
-    //     let currentPost = v.postTitle.toLocaleLowerCase().replace(' ', '-');
-    //     if (currentPost == newTitle) {
-    //         return res.render('home', {
-    //             head: v.postTitle,
-    //             content: v.actualPost,
-    //             posts: ''
-    //         });
-    //     }
-        
-    // }
-
-
 });
 
 app.post('/compose/publish-post', (req, res) => {
-    Post.create({
-        postTitle: req.body.postTitle,
-        actualPost: req.body.actualPost
-    }, function(err, newPost){
-        if(err){
-            console.log('Error while posting that!');
-        }
-        else{
-            console.log('******', newPost);
-            return res.redirect('/');
-        }
-    });
+    // Post.create({
+    //     postTitle: req.body.postTitle,
+    //     actualPost: req.body.actualPost
+    // }, function(err, newPost){
+    //     if(err){
+    //         console.log('Error while posting that!');
+    //     }
+    //     else{
+    //         console.log('******', newPost);
+    //         return res.redirect('/');
+    //     }
+    // });
+
+    Post.update({postTitle: req.body.postTitle, actualPost: req.body.actualPost}, {
+        $set: { 
+            postTitle: req.body.postTitle,
+            actualPost: req.body.actualPost
+         }
+    }, {upsert: true}, function(err, newPost){
+            if(err){
+                console.log('Error while posting that!');
+            }
+            else{
+                console.log('******', newPost);
+                return res.redirect('/');
+            }
+        });
 });
 
 
