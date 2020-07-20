@@ -2,6 +2,8 @@ const port = 5000;
 const express = require('express');
 const path = require('path');
 const app = express();
+const db = require('./config/index');
+const Post = require('./models/blog_website_db');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded());
@@ -11,10 +13,18 @@ var aboutContent = "Class aptent taciti sociosqu ad litora torquent per conubia 
 var postsArr = [];
 
 app.get('/' || '/posts', (req, res) => {
-    return res.render('home', {
-        posts: postsArr,
-        head: '',
-        content: '',
+
+    Post.find({}, function(err, posts_collection){
+        if(err){
+            console.log('Error while fetching from database');
+        }
+        else{
+            return res.render('home', {
+                head: '',
+                content: '',
+                posts: posts_collection
+            });
+        }
     });
 });
 app.get('/sent-link' || '/compose/sent-link', (req, res) => {
@@ -42,12 +52,27 @@ app.get('/compose', (req, res) => {
 
 
 app.get('/readmore', (req, res) => {
-    let index = req.query.index;
-    return res.render('home', {
-        head: postsArr[parseInt(index)].postTitle,
-        content: postsArr[parseInt(index)].actualPost,
-        posts: ''
+    let id = req.query.id;
+    console.log(id);
+    Post.find({_id: id}, function(err, posts){
+        if(err){
+            console.log('Could not take you to this post');
+        }
+        else{
+            console.log(posts);
+            return res.redirect('/');
+        }
     });
+
+
+
+
+
+    // return res.render('home', {
+    //     head: postsArr[parseInt(index)].postTitle,
+    //     content: postsArr[parseInt(index)].actualPost,
+    //     posts: ''
+    // });
 });
 
 app.get('/posts/:post_title', (req, res) => {
@@ -68,9 +93,18 @@ app.get('/posts/:post_title', (req, res) => {
 });
 
 app.post('/compose/publish-post', (req, res) => {
-    postsArr.push(req.body);
-
-    return res.redirect('/');
+    Post.create({
+        postTitle: req.body.postTitle,
+        actualPost: req.body.actualPost
+    }, function(err, newPost){
+        if(err){
+            console.log('Error while posting that!');
+        }
+        else{
+            console.log('******', newPost);
+            return res.redirect('/');
+        }
+    });
 });
 
 

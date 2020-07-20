@@ -13,7 +13,7 @@
                     <p class="demo">
                         <%= posts[i].actualPost %>
                     </p>
-                    <a href="/readmore?index=<%= i %>">read more</a>
+                    <a href="/readmore?id=<%= posts[i]._id %>">read more</a>
                 </li>
 
             <% } %>
@@ -31,4 +31,3 @@
 
 
     <%- include("footer")%>
-    
