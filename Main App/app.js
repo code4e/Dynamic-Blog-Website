@@ -78,6 +78,6 @@ app.listen(port, function (err) {
     if (err) {
         console.log('Cannot start server');
     } else {
-        console.log('server has started');
+        console.log(`server has started at port ${port}`);
     }
 });

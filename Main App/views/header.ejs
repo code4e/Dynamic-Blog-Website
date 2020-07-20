@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/form.css">
+    <link rel="stylesheet" href="/css/home.css">
+
+    <title>Blog Website</title>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="site-title">
+                <a href="/" class="text-decoration-none">
+                    Daily Journal
+                </a>
+            </div>
+            <div class="other-links">
+                <a href="/" class="text-decoration-none">HOME</a>
+                <a href="/compose" class="text-decoration-none">COMPOSE</a>
+                <a href="/sent-link?link=<%= 'about' %>" class="text-decoration-none">ABOUT US</a>
+                <a href="/sent-link?link=<%= 'contact' %>" class="text-decoration-none">CONTACT US</a>
+            </div>
+        </nav>
+    </header>
