@@ -8,6 +8,6 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     }
-});
+}, {collation: { locale: 'en_US', strength: 2 }});
 const Post = mongoose.model('Post', postSchema);
 module.exports = Post;

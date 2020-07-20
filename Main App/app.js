@@ -53,41 +53,50 @@ app.get('/compose', (req, res) => {
 
 app.get('/readmore', (req, res) => {
     let id = req.query.id;
-    console.log(id);
-    Post.find({_id: id}, function(err, posts){
+    Post.find({_id: id}, function(err, posts_collection){
         if(err){
             console.log('Could not take you to this post');
         }
         else{
-            console.log(posts);
-            return res.redirect('/');
-        }
-    });
-
-
-
-
-
-    // return res.render('home', {
-    //     head: postsArr[parseInt(index)].postTitle,
-    //     content: postsArr[parseInt(index)].actualPost,
-    //     posts: ''
-    // });
-});
-
-app.get('/posts/:post_title', (req, res) => {
-    let newTitle = req.params.post_title.toLocaleLowerCase().replace(' ', '-');
-    for (let [i, v] of postsArr.entries()) {
-        let currentPost = v.postTitle.toLocaleLowerCase().replace(' ', '-');
-        if (currentPost == newTitle) {
             return res.render('home', {
-                head: v.postTitle,
-                content: v.actualPost,
+                head: posts_collection[0].postTitle,
+                content: posts_collection[0].actualPost,
                 posts: ''
             });
         }
+    });
+});
+
+app.get('/posts/:post_title', (req, res) => {
+    let newTitle = req.params.post_title.toLocaleLowerCase().replace('-', ' ');
+    Post.find({postTitle: newTitle}, function(err, posts_collection){
+        if(err){
+            console.log('Coud not fetch this post');
+        }
+        else{
+            return res.render('home', {
+                head: posts_collection[0].postTitle,
+                content: posts_collection[0].actualPost,
+                posts: ''
+            });
+        }
+    }).collation(
+        { locale: 'en', strength: 2 }
+      );
+
+
+
+    // for (let [i, v] of postsArr.entries()) {
+    //     let currentPost = v.postTitle.toLocaleLowerCase().replace(' ', '-');
+    //     if (currentPost == newTitle) {
+    //         return res.render('home', {
+    //             head: v.postTitle,
+    //             content: v.actualPost,
+    //             posts: ''
+    //         });
+    //     }
         
-    }
+    // }
 
 
 });
